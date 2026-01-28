@@ -17,4 +17,3 @@ X_with_bias = np.concatenate((np.ones((m,1)), X_np), axis=1)
 def hypothesis(X_with_bias,theta):
    return np.dot(X_with_bias, theta)
 def cost():
-   
