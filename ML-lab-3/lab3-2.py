@@ -32,6 +32,7 @@ def main():
      model = model_training(X_train, X_test, y_train, y_test)
      y_pred, r2 = prediction(model, X_test, y_test)
      print("r2 :",r2)
+     print(y_pred)
      # print(y_pred)
 if __name__ == "__main__":
     main()

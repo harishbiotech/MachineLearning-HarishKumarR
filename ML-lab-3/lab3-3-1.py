@@ -91,8 +91,8 @@
 # print("theta10", theta10)
 # print("prediction10", prediction10)
 # print("--------------------------------------------------------------")
-X=[[1,1],[1,3]]
-y=[[2],[6]]
+X=[[1,1],[1,2]]
+y=[[2],[4]]
 theta=[[0],[0]]
 def hypothesis(X,theta):
     hypo=[]
@@ -115,7 +115,7 @@ def hypothesis(X,theta):
     return hypo
 h=hypothesis(X,theta)
 print("hypothesis",h)
-alpha=0.01
+alpha=0.001
 def find_theta(X,y,h,alpha):
     thet=[]
     for i in range(len(y[0])):
@@ -145,7 +145,7 @@ def find_theta(X,y,h,alpha):
     return thet
 te=find_theta(X,y,h,alpha)
 print("thet",te)
-for i in range(100):
+for i in range(850.):
     print(f"{i}")
     theta=te
     hh=hypothesis(X,theta)
