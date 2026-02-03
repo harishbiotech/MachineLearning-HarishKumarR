@@ -58,6 +58,7 @@ print("-"*30)
 #
 #
 #
+
 for i in range(1000):
     Theta=theta
     hypothes = hypothesis(X_with_bias_train,Theta)
