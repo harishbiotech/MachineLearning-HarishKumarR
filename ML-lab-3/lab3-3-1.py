@@ -145,7 +145,7 @@ def find_theta(X,y,h,alpha):
     return thet
 te=find_theta(X,y,h,alpha)
 print("thet",te)
-for i in range(850.):
+for i in range(850):
     print(f"{i}")
     theta=te
     hh=hypothesis(X,theta)
