@@ -31,8 +31,8 @@ X_train_scaled = np.concatenate((np.ones((m,1)), X_train_scaled), axis=1)
 n = X_test_scaled.shape[0]
 X_test_scaled = np.concatenate((np.ones((n,1)), X_test_scaled), axis=1)
 
-print("X train scaled =", X_train_scaled.shape)
-print("X test scaled =", X_test_scaled.shape)
+print("X train scaled =", X_train_scaled)
+print("X test scaled =", X_test_scaled)
 
 # ---------------- INITIALIZE THETA ----------------
 theta = np.zeros((X_train_scaled.shape[1]))
@@ -53,7 +53,7 @@ def cost(h, y_np):
     return s*1/2
 
 # ---------------- GRADIENT DESCENT ----------------
-alpha = 0.000006  # FIX: smaller learning rate
+alpha = 0.00001 # FIX: smaller learning rate
 
 def find_theta(X_train_scaled, y_np_train, h, alpha, theta_matrix):
     thet = []
