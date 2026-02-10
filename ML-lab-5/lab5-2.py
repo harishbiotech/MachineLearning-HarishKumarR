@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import math
 
-x = [i for i in range(1, 11)]
+x = [i for i in range(1, 101)]
 y = []
 
 def sigmoid(z):

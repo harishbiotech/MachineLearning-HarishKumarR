@@ -1,7 +1,7 @@
 #===================Compute the derivative of a sigmoid function and visualize it=====================
 import matplotlib.pyplot as plt
 import math
-x=[i for i in range(1,11)]
+x=[i for i in range(1,101)]
 y=[]
 def derivative_sigmoid(z):
     return (1/(1+math.exp(-z)))*(1-(1/(1+math.exp(-z))))
