@@ -18,7 +18,7 @@ def load_data():
 
 # ---------------- SPLIT DATA ----------------
 def split_data(X, y):
-    return train_test_split(X, y, test_size=0.3, random_state=9999)
+    return train_test_split(X, y, test_size=0.3, random_state=0)
 
 # ---------------- STANDARDIZATION ----------------
 def standardize(X_train, X_test):
@@ -54,6 +54,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

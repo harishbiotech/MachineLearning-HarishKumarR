@@ -48,9 +48,9 @@ theta_updated=Stochastic_Gradient_Descent(theta, y_train_np, h, X_train_scaled,a
 theta_Transpose=theta_updated
 X_multiply=np.matmul(X_train_scaled, theta_Transpose)
 X_multiply=np.sort(X_multiply, axis=0)
-print(X_multiply)
+#print(X_multiply)
 Y=1/(1+np.exp(-X_multiply))
-print(Y)
+#print(Y)
 plt.title('sigmoid')
 plt.plot(X_multiply,Y)
 plt.show()
@@ -58,7 +58,11 @@ w=(1/1+np.exp(-X_multiply))*(1-(1/1+np.exp(-X_multiply)))
 plt.title('differentiated sigmoid')
 plt.plot(X_multiply,w)
 plt.show()
-
+h_2=hypothesis(theta_updated, X_test_scaled)
+print("Prediction = ",h_2)
+h_2=(h_2>=0.5).astype(int)
+accuracy=accuracy_score(y_test_np, h_2)
+print("Accuracy =",accuracy)
 
 
 
