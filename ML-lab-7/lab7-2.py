@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import numpy as np
@@ -33,9 +33,7 @@ for i in range(k):
 
         print(f'{start} : {end}')
 
-        scaler = MinMaxScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
+
         model=LogisticRegression()
         model.fit(X_train,y_train)
         prediction=model.predict(X_test)
