@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, r2_score
 from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 
 # Load dataset
@@ -40,26 +41,26 @@ def scale_data(X_train_train, X_train_validation, X_test):
 
 # ---------------- Models ---------------- #
 
-def model_linear_regression(X_train_train, y_train_train):
-    model_linear = LinearRegression()
-    model_linear.fit(X_train_train, y_train_train)
-    return model_linear
+def model_tree_classifier(X_train_train, y_train_train):
+    model_tree = DecisionTreeClassifier()
+    model_tree.fit(X_train_train, y_train_train)
+    return model_tree
 
 
-def prediction_linear(model_linear, X_validation, y_validation):
-    prediction = model_linear.predict(X_validation)
-    return r2_score(y_validation, prediction)
+def prediction_tree_classifier(model_tree, X_validation, y_validation):
+    prediction = model_tree.predict(X_validation)
+    return prediction
 
 
 def model_logistic_regression(X_train_train, y_train_train):
-    model_logistic = LogisticRegression(max_iter=500)
+    model_logistic = LogisticRegression(solver='saga',l1_ratio=1.0,C=0.5,max_iter=5000)
     model_logistic.fit(X_train_train, y_train_train)
     return model_logistic
 
 
 def prediction_logistic(model_logistic, X_validation, y_validation):
     prediction = model_logistic.predict(X_validation)
-    return accuracy_score(y_validation, prediction)
+    return prediction
 
 
 def main():
@@ -70,14 +71,17 @@ def main():
 
     X_train_train_scaled, X_train_validation_scaled, X_test_scaled = scale_data(X_train_train, X_train_validation, X_test)
 
-    model_linear = model_linear_regression(X_train_train_scaled, y_train_train)
+    model_linear = model_tree_classifier(X_train_train_scaled, y_train_train)
     model_logistic = model_logistic_regression(X_train_train_scaled, y_train_train)
 
-    r2 = prediction_linear(model_linear, X_train_validation_scaled, y_train_validation)
-    accuracy = prediction_logistic(model_logistic, X_train_validation_scaled, y_train_validation)
+    predict_tree = prediction_tree_classifier(model_linear, X_train_validation_scaled, y_train_validation)
+    predict_logistic = prediction_logistic(model_logistic, X_train_validation_scaled, y_train_validation)
 
-    print("Validation r2_score (Linear):", r2)
-    print("Validation accuracy_score (Logistic):", accuracy)
+    accuracy_tree = accuracy_score(y_train_validation, predict_tree)
+    accuracy_logistic = accuracy_score(y_train_validation, predict_logistic)
+
+    print("Validation acuuracy_score (Tree):", accuracy_tree)
+    print("Validation accuracy_score (Logistic):", accuracy_logistic)
 
 
 if __name__ == "__main__":
