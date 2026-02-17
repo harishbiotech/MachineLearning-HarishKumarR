@@ -1,51 +1,141 @@
 #Use validation set to do feature and model selection.
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import  LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import r2_score
+# Use validation set to do feature and model selection.
 
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, r2_score
+from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
+# Load dataset
 df = pd.read_csv('data_kfold.csv')
-X=df.drop(columns=[df.columns[0], df.columns[1], df.columns[32]])
-y=df['diagnosis'].map({'M': 1, 'B': 0})
+
+X = df.drop(columns=[df.columns[0], df.columns[1], df.columns[32]])
+y = df['diagnosis'].map({'M': 1, 'B': 0})
 
 
-def split_data(X,y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
-    return X_train, X_test, y_train, y_test
+# ---------------- Split Functions ---------------- #
 
-def validation_data(X_train,y_train):
-    X_train_train,X_train_validation,y_train_train,y_train_validation = train_test_split(X_train,y_train, test_size = 0.3, random_state = 0)
-    return X_train_train,X_train_validation,y_train_train,y_train_validation
+def split_data(X, y):
+    return train_test_split(X, y, test_size=0.3, random_state=0)
 
-def model_linaer_regression(X_train_train,y_train_train):
+
+def validation_data(X_train, y_train):
+    return train_test_split(X_train, y_train, test_size=0.3, random_state=0)
+
+
+# ---------------- Scaling Function ---------------- #
+
+def scale_data(X_train_train, X_train_validation, X_test):
+    scaler = StandardScaler()
+
+    X_train_train_scaled = scaler.fit_transform(X_train_train)
+
+    X_train_validation_scaled = scaler.transform(X_train_validation)
+    X_test_scaled = scaler.transform(X_test)
+
+    return X_train_train_scaled, X_train_validation_scaled, X_test_scaled
+
+
+# ---------------- Models ---------------- #
+
+def model_linear_regression(X_train_train, y_train_train):
     model_linear = LinearRegression()
-    model_linear.fit(X_train_train,y_train_train)
+    model_linear.fit(X_train_train, y_train_train)
     return model_linear
-def prediction_linear(model_linear,X_test_validation,y_test_validation):
-    prediction = model_linear.predict(X_test_validation)
-    r2 = r2_score(y_test_validation,prediction)
-    return r2
-def model_logistic_regression(X_train_train,y_train_train):
-    model_logistic = LogisticRegression(max_iter=500)
-    model_logistic.fit(X_train_train,y_train_train)
-    return model_logistic
-def prediction_logistic(model_logistic,X_test_validation,y_test_validation):
-    prediction = model_logistic.predict(X_test_validation)
-    accuracy = accuracy_score(y_test_validation,prediction)
-    return accuracy
-def main():
-    X_train, X_test, y_train, y_test = split_data(X,y)
-    X_train_train,X_train_validation,y_train_train,y_train_validation= validation_data(X_train,y_train)
-    model_linear = model_linaer_regression(X_train_train,y_train_train)
-    model_logistic = model_logistic_regression(X_train_train,y_train_train)
-    r2 = prediction_linear(model_linear, X_train_validation, y_train_validation)
-    accuracy = prediction_logistic(model_logistic, X_train_validation, y_train_validation)
 
-    print("r2_score:", r2)
-    print("accuracy_score:", accuracy)
+
+def prediction_linear(model_linear, X_validation, y_validation):
+    prediction = model_linear.predict(X_validation)
+    return r2_score(y_validation, prediction)
+
+
+def model_logistic_regression(X_train_train, y_train_train):
+    model_logistic = LogisticRegression(max_iter=500)
+    model_logistic.fit(X_train_train, y_train_train)
+    return model_logistic
+
+
+def prediction_logistic(model_logistic, X_validation, y_validation):
+    prediction = model_logistic.predict(X_validation)
+    return accuracy_score(y_validation, prediction)
+
+
+def main():
+
+    X_train, X_test, y_train, y_test = split_data(X, y)
+
+    X_train_train, X_train_validation, y_train_train, y_train_validation = validation_data(X_train, y_train)
+
+    X_train_train_scaled, X_train_validation_scaled, X_test_scaled = scale_data(X_train_train, X_train_validation, X_test)
+
+    model_linear = model_linear_regression(X_train_train_scaled, y_train_train)
+    model_logistic = model_logistic_regression(X_train_train_scaled, y_train_train)
+
+    r2 = prediction_linear(model_linear, X_train_validation_scaled, y_train_validation)
+    accuracy = prediction_logistic(model_logistic, X_train_validation_scaled, y_train_validation)
+
+    print("Validation r2_score (Linear):", r2)
+    print("Validation accuracy_score (Logistic):", accuracy)
+
 
 if __name__ == "__main__":
     main()
+# from sklearn.linear_model import LinearRegression
+# from sklearn.linear_model import  LogisticRegression
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import accuracy_score
+# from sklearn.metrics import r2_score
+# from sklearn.preprocessing import StandardScaler
+#
+# import pandas as pd
+#
+# df = pd.read_csv('data_kfold.csv')
+# X=df.drop(columns=[df.columns[0], df.columns[1], df.columns[32]])
+# y=df['diagnosis'].map({'M': 1, 'B': 0})
+#
+#
+# def split_data(X,y):
+#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+#     return X_train, X_test, y_train, y_test
+#
+# def validation_data(X_train,y_train):
+#     X_train_train,X_train_validation,y_train_train,y_train_validation = train_test_split(X_train,y_train, test_size = 0.3, random_state = 0)
+#     return X_train_train,X_train_validation,y_train_train,y_train_validation
+# def scaled_data(X_train_train,X_train_validation,y_train_train,y_train_validation):
+#     scaler = StandardScaler()
+#     X_train_trainscaler.fit_transform(X_train_train)
+#     scaler.transform(X_train_validation)
+#     scaler.transform(y_train_validation)
+#     return
+#
+# def model_linaer_regression(X_train_train,y_train_train):
+#     model_linear = LinearRegression()
+#     model_linear.fit(X_train_train,y_train_train)
+#     return model_linear
+# def prediction_linear(model_linear,X_test_validation,y_test_validation):
+#     prediction = model_linear.predict(X_test_validation)
+#     r2 = r2_score(y_test_validation,prediction)
+#     return r2
+# def model_logistic_regression(X_train_train,y_train_train):
+#     model_logistic = LogisticRegression(max_iter=500)
+#     model_logistic.fit(X_train_train,y_train_train)
+#     return model_logistic
+# def prediction_logistic(model_logistic,X_test_validation,y_test_validation):
+#     prediction = model_logistic.predict(X_test_validation)
+#     accuracy = accuracy_score(y_test_validation,prediction)
+#     return accuracy
+# def main():
+#     X_train, X_test, y_train, y_test = split_data(X,y)
+#     X_train_train,X_train_validation,y_train_train,y_train_validation= validation_data(X_train,y_train)
+#     model_linear = model_linaer_regression(X_train_train,y_train_train)
+#     model_logistic = model_logistic_regression(X_train_train,y_train_train)
+#     r2 = prediction_linear(model_linear, X_train_validation, y_train_validation)
+#     accuracy = prediction_logistic(model_logistic, X_train_validation, y_train_validation)
+#
+#     print("r2_score:", r2)
+#     print("accuracy_score:", accuracy)
+#
+# if __name__ == "__main__":
+#     main()
