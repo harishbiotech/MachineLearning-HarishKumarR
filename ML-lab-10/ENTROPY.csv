@@ -1,0 +1,9 @@
+﻿weather,windy ,play
+sunny,NO,NO
+sunny,YES,NO
+overcast,NO,YES
+rainy,NO,YES
+rainy,YES,NO
+rainy,NO,YES
+overcast,YES,YES
+sunny ,NO,NO
