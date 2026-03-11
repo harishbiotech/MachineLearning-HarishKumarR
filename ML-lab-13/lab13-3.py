@@ -47,3 +47,4 @@ predict_regression=model_regression.predict(X_test)
 
 print('accuracy_score',accuracy_score(y_test,predict_classification))
 print('r2score',r2_score(y_test_coded,predict_regression))
+
