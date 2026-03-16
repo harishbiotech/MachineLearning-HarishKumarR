@@ -14,7 +14,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 model=BaggingClassifier(
     estimator=DecisionTreeClassifier(),
-    n_estimators=10,
+    n_estimators=25,
     random_state=0
 )
 
@@ -31,7 +31,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import r2_score
 model_regressor=BaggingRegressor(
     estimator=DecisionTreeRegressor(),
-    n_estimators=10,
+    n_estimators=25,
     random_state=0
 )
 
