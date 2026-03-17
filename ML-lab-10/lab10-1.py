@@ -9,6 +9,7 @@ X = df.iloc[:, :-1]
 y = df.iloc[:, -1]
 def Entropy(y):
     y_unique=y.value_counts(normalize=True)
+    print(y_unique)
     proportions = y_unique.tolist()
     entropy=[]
     s = 0
