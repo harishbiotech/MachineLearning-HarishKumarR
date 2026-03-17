@@ -24,7 +24,12 @@ def root_entropy(X,y):
 
 def Information_gain(X,y):
     X=X.tolist()
-    print(X)
+
+    def split(X):
+        for i in range(len(X.columns)):
+            for j in range(len(X.iloc[:, :1])):
+                a = (X.iloc[:j, :i] + X.iloc[:j + 1, :i]) / 2
+        return a
 
 X,y=load_data()
 print(root_entropy(X,y))
