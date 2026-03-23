@@ -8,6 +8,7 @@ X = X.sort_values(by=['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidth
 for i in range(len(X.columns)):
     for j in range(len(X.iloc[:,:1])):
         a=(X.iloc[:j,:i]+X.iloc[:j+1,:i])/2
-
-
+print(type(a))
+print(len(X.columns))
+print(len(X.iloc[:, :1]))
 
