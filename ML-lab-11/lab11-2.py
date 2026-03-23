@@ -5,10 +5,14 @@ df = pd.read_csv("Iris.csv")
 X = df.drop(columns=['Id', 'Species'])
 y = df['Species'].map({"Iris-setosa": 0, "Iris-versicolor": 1, "Iris-virginica": 2})
 X = X.sort_values(by=['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm'])
+
 for i in range(len(X.columns)):
     for j in range(len(X.iloc[:,:1])):
         a=(X.iloc[:j,:i]+X.iloc[:j+1,:i])/2
-print(type(a))
-print(len(X.columns))
-print(len(X.iloc[:, :1]))
 
+for j in range(len(a.columns)):
+    for k in range(len(a.iloc[:,:1])):
+        a.iloc[k,:j]
+
+# print(len(a.columns))
+# print(len(a.iloc[:,:1]))
