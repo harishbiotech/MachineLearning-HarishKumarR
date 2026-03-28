@@ -118,85 +118,89 @@ def predict_one(tree, row):
 def predict(tree, X):
     return X.apply(lambda row: predict_one(tree, row), axis=1)
 
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-
-CLASS_NAMES = {0: "Setosa", 1: "Versicolor", 2: "Virginica"}
-CLASS_COLORS = {0: "#9FE1CB", 1: "#B5D4F4", 2: "#F5C4B3"}
-NODE_COLOR = "#D3D1C7"
-
-def get_tree_depth(tree):
-    if tree["leaf"]:
-        return 0
-    return 1 + max(get_tree_depth(tree["left"]), get_tree_depth(tree["right"]))
-
-def plot_node(ax, text, x, y, color, fontsize=8):
-    ax.text(x, y, text, ha="center", va="center", fontsize=fontsize,
-            bbox=dict(boxstyle="round,pad=0.4", facecolor=color,
-                      edgecolor="#5F5E5A", linewidth=0.8))
-
-def plot_tree_recursive(ax, tree, x, y, dx, dy):
-    if tree["leaf"]:
-        cls = tree["class"]
-        label = f"class: {CLASS_NAMES[cls]}"
-        plot_node(ax, label, x, y, CLASS_COLORS[cls])
-        return
-
-    label = f"{tree['col']} <= {tree['threshold']:.2f}"
-    plot_node(ax, label, x, y, NODE_COLOR)
-
-    # Left child
-    lx, ly = x - dx, y - dy
-    ax.annotate("", xy=(lx, ly + 0.02), xytext=(x, y - 0.02),
-                arrowprops=dict(arrowstyle="-|>", color="#5F5E5A", lw=0.8))
-    ax.text((x + lx) / 2 - 0.01, (y + ly) / 2, "yes",
-            fontsize=7, color="#0F6E56", ha="right")
-    plot_tree_recursive(ax, tree["left"],  lx, ly, dx / 2, dy)
-
-    # Right child
-    rx, ry = x + dx, y - dy
-    ax.annotate("", xy=(rx, ry + 0.02), xytext=(x, y - 0.02),
-                arrowprops=dict(arrowstyle="-|>", color="#5F5E5A", lw=0.8))
-    ax.text((x + rx) / 2 + 0.01, (y + ry) / 2, "no",
-            fontsize=7, color="#C04828", ha="left")
-    plot_tree_recursive(ax, tree["right"], rx, ry, dx / 2, dy)
-
-def plot_my_tree(tree):
-    depth = get_tree_depth(tree)
-    fig_h = max(6, depth * 2.5)
-    fig_w = max(10, 2 ** depth * 1.5)
-
-    fig, ax = plt.subplots(figsize=(fig_w, fig_h))
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-    ax.set_title("My Decision Tree — Iris Dataset", fontsize=13, pad=12)
-
-    dy = 0.85 / max(depth, 1)
-    plot_tree_recursive(ax, tree, x=0.5, y=0.95, dx=0.22, dy=dy)
-
-    # Legend
-    patches = [mpatches.Patch(facecolor=CLASS_COLORS[i], edgecolor="#5F5E5A",
-                               label=CLASS_NAMES[i]) for i in CLASS_NAMES]
-    ax.legend(handles=patches, loc="lower right", fontsize=8, title="Classes")
-
-    plt.tight_layout()
-    plt.savefig("my_decision_tree.png", dpi=150, bbox_inches="tight")
-    plt.show()
-    print("Tree saved as my_decision_tree.png")
-
 X, y = load_data()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Build the tree
-tree = build_tree(X_train, y_train, max_depth=2, min_samples=0)
+tree = build_tree(X_train, y_train, max_depth=5)
 
 # Predict
 y_pred = predict(tree, X_test)
 
-
 # Accuracy
 print("Accuracy:", accuracy_score(y_test, y_pred))
 
-plot_my_tree(tree)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def load_data():
+#     df = pd.read_csv("Iris.csv")
+#     X=df.drop(columns=['Id','Species'])
+#     y=df['Species'].map({ "Iris-setosa":0,"Iris-versicolor":1,"Iris-virginica":2})
+#     return X,y
+#
+# def root_entropy(y):
+#     probs = y.value_counts(normalize=True)
+#     s = 0
+#     for p in probs:
+#         s += -p * math.log(p, 2)
+#     return s
+# # y_unique=y.value_counts(normalize=True)
+#     # #print(y_unique)
+#     # proportions=y_unique.to_list()
+#     # #print(proportions)
+#     # entropy=[]
+#     # s=0
+#     # for i in range(len(proportions)):
+#     #     s = s + (-proportions[i]) * (math.log(proportions[i], 3))
+#     # entropy=s
+#     # return entropy
+#
+# def Information_gain(X,y):
+#     X=X.tolist()
+#
+#     def split(X):
+#         for i in range(len(X.columns)):
+#             for j in range(len(X.iloc[:, :1])):
+#                 a = (X.iloc[:j, :i] + X.iloc[:j + 1, :i]) / 2
+#         return a
+#
+#
+# def split_points(X):
+#     for i in range(len(X.columns)):
+#         for j in range(len(X.iloc[:,:1])):
+#             a=(X.iloc[:j,:i]+X.iloc[:j+1,:i])/2
+#     return a
+#
+# def IG_entropy_for_columns(a,X,y):
+#     for col in a.columns:
+#         for i in range(len(a[col])):
+#             #left_node=pd.concat([X[col][X[col]>a[col][i]],y[X[col]>a[col][i]]], axis=1)
+#             left_node=y[X[col]>a[col][i]]
+#             print(root_entropy(left_node))
+#             right_node=X[col][X[col] <= a[col][i]]
+#             print(root_entropy(right_node))
+#             # print(left_node)

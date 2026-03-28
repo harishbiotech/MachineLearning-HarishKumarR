@@ -39,6 +39,7 @@ def information_gain(X, y):
             indices = X[X[col] == val].index
             #print('indices',indices)
             y_val = y.loc[indices]
+
             #print('y_val',y_val)
             H_child = Entropy(y_val)
             #print('H_child',H_child)
