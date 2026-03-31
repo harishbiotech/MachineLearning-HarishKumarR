@@ -19,7 +19,7 @@ def load_data():
     return X,y
 
 def split_data(X,y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10)
     return X_train, X_test, y_train, y_test
 
 def model(X_train, y_train):
