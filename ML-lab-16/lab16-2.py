@@ -19,21 +19,36 @@ def model_regressor(X_train, y_train ):
     model_reg.fit(X_train,y_train)
     return model_reg
 
-def model_classifier(X_train, y_train ):
-    model_cls= XGBClassifier(n_estimators=100,learning_rate=0.1)
-    model_cls.fit(X_train,y_train)
-    return model_cls
+# def model_classifier(X_train, y_train ):
+#     model_cls= XGBClassifier(n_estimators=100,learning_rate=0.1)
+#     model_cls.fit(X_train,y_train)
+#     return model_cls
 
-def predict(model_reg, X_test, y_test ):
+def predict_regression(model_reg, X_test, y_test ):
     prediction_reg = model_reg.predict(X_test)
-    print(f'r2_score : {r2_score(y_test, prediction_reg)}')
+    return prediction_reg
 
+# def predict_classification(model_cls, X_test, y_test ):
+#     prediction_cls = model_cls.predict(X_test)
+#     return prediction_cls
+
+def r2(y_test, prediction_reg):
+    return r2_score(y_test, prediction_reg)
+
+# def accuracy(y_test, prediction_cls):
+#     return accuracy_score(y_test, prediction_cls)
 
 def main ():
     X,y=load_data()
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=10)
     model_reg=model_regressor(X_train, y_train)
-    prediction=predict(model_reg, X_test, y_test)
+    prediction_reg=predict_regression(model_reg, X_test, y_test)
+    r_2=r2(y_test, prediction_reg)
+    print("R-squared:",r_2)
+    # model_cls=model_classifier(X_train, y_train)
+    # prediction_cls=predict_classification(model_cls, X_test, y_test)
+    # Accuracy=accuracy(y_test,prediction_cls)
+
 
 if __name__=="__main__":
     main()
