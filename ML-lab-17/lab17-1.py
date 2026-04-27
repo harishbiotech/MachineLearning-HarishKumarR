@@ -17,9 +17,8 @@ y = np.array([d[2] for d in data])
 for label in ["Blue", "Red"]:
     points = X[y == label]
     plt.scatter(points[:,0], points[:,1], label=label)
-
 plt.xlabel("x1")
 plt.ylabel("x2")
-plt.legend()
+# plt.legend()
 plt.title("Original 2D Data")
 plt.show()

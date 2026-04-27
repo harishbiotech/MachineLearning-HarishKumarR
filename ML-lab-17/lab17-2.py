@@ -38,3 +38,5 @@ ax.set_zlabel("x2^2")
 plt.legend()
 plt.title("Transformed 3D Data")
 plt.show()
+
+fig,ax = plt.subplots(figsize=(4,3))
