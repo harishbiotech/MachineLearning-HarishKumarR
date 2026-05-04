@@ -1,107 +1,43 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
+from patsy.state import scale
+from statsmodels.datasets import get_rdataset
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from ISLP import load_data
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, cut_tree
+from ISLP.cluster import compute_linkage
 
-# Load data
-data = load_iris()
-X = pd.DataFrame(data.data, columns=data.feature_names)
-print(X)
-# Standardize
-# scaler = StandardScaler()
-# X_scaled = scaler.fit_transform(X)
 
-# Apply PCA (all components)
-pca = PCA()
-X_pca = pca.fit_transform(X)
+def q1():
+    us = get_rdataset("USArrests").data
+    scale = StandardScaler(with_std=True,with_mean=True)
+    us_scaled = scale.fit_transform(us)
+    pca = PCA()
+    pca_us = pca.fit_transform(us_scaled)
+    score = pca.transform(us_scaled)
+    lables=['PC1','PC2','PC3','PC4']
+    plt.bar(lables,pca.explained_variance_ratio_,label='Explained Variance')
+    plt.plot(lables,pca.explained_variance_ratio_,color='red',label='Explained Variance',marker='D')
+    plt.plot(lables,pca.explained_variance_ratio_.cumsum(),color='orange',label='Cumulative Explained Variance',marker='X')
+    plt.legend()
+    plt.show()
 
-# Explained variance
-print("Explained Variance Ratio:")
-print(pca.explained_variance_ratio_)
+def q2():
+    np.random.seed(0);
+    X = np.random.standard_normal((50, 2));
+    X[:25, 0] += 3;
+    X[:25, 1] -= 4;
+    kmeans = KMeans(n_clusters=2,random_state=2,n_init=20).fit(X)
+    kmeans.labels_
+    plt.scatter(X[:,0],X[:,1],c=kmeans.labels_)
+    plt.show()
 
-# Scree Plot
-plt.figure()
-plt.plot(np.cumsum(pca.explained_variance_ratio_), marker='o')
-plt.title("Scree Plot (Cumulative Variance)")
-plt.xlabel("Number of Components")
-plt.ylabel("Cumulative Variance")
-plt.grid()
-plt.show()
+def main():
+    q1()
+    q2()
 
-# Reduce to 2 components
-pca_2 = PCA(n_components=2)
-X_reduced = pca_2.fit_transform(X)
-
-# Plot PCA result
-plt.figure()
-plt.scatter(X_reduced[:, 0], X_reduced[:, 1])
-plt.title("PCA (2 Components)")
-plt.xlabel("PC1")
-plt.ylabel("PC2")
-plt.grid()
-plt.show()
-# import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# from sklearn.datasets import load_iris
-# from sklearn.preprocessing import StandardScaler
-# from sklearn.decomposition import PCA
-# from sklearn.cluster import KMeans
-#
-# data = load_iris()
-# X = pd.DataFrame(data.data, columns=data.feature_names)
-# scaler = StandardScaler()
-# X_scaled = scaler.fit_transform(X)
-# pca = PCA()
-# X_pca = pca.fit_transform(X_scaled)
-#
-# print("Explained Variance Ratio:")
-# print(pca.explained_variance_ratio_)
-#
-# plt.figure()
-# plt.plot(np.cumsum(pca.explained_variance_ratio_), marker='o')
-# plt.title("Scree Plot (Cumulative Variance)")
-# plt.xlabel("Number of Components")
-# plt.ylabel("Cumulative Variance")
-# plt.grid()
-# plt.show()
-#
-# pca_2 = PCA(n_components=2)
-# X_reduced = pca_2.fit_transform(X_scaled)
-#
-# plt.figure()
-# plt.scatter(X_reduced[:, 0], X_reduced[:, 1])
-# plt.title("PCA (2 Components)")
-# plt.xlabel("PC1")
-# plt.ylabel("PC2")
-# plt.grid()
-# plt.show()
-#
-# kmeans = KMeans(n_clusters=3, random_state=1)
-# labels = kmeans.fit_predict(X_scaled)
-#
-#
-# plt.figure()
-# plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=labels, cmap='viridis')
-# plt.title("K-Means Clustering (K=3)")
-# plt.xlabel("PC1")
-# plt.ylabel("PC2")
-# plt.grid()
-# plt.show()
-#
-# inertia = []
-# K_range = range(1, 10)
-# for k in K_range:
-#     km = KMeans(n_clusters=k, random_state=1)
-#     km.fit(X_scaled)
-#     inertia.append(km.inertia_)
-#
-# plt.figure()
-# plt.plot(K_range, inertia, marker='o')
-# plt.title("Elbow Method")
-# plt.xlabel("Number of Clusters (K)")
-# plt.ylabel("Inertia")
-# plt.grid()
-# plt.show()
+if __name__ == '__main__':
+    main()
