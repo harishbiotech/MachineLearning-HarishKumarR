@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 X={'X1':[1,1,2,8,8,9],
  'X2':[1,2,2,8,9,8] }
 df = pd.DataFrame(X)
+
 mu=df.mean(axis=0)
-print(mu)
+
 #Randomly assign samples in two cluster
 # Shuffle rows
 df_shuffled = df.sample(frac=1, random_state=10)
@@ -43,4 +44,5 @@ plt.scatter(df_cluster_1['X1'],df_cluster_1['X2'],label='cluster 1')
 plt.scatter(df_cluster_2['X1'],df_cluster_2['X2'],label='cluster 2')
 plt.legend()
 plt.show()
+
 
