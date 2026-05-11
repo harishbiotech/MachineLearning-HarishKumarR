@@ -1,34 +1,59 @@
-# from ISLP import load_data
-# from sklearn.cluster import PCA, HierarchicalClustering
-# from sklearn.model_selection import train_test_split
-# import matplotlib.pyplot as plt
-#
-# def hierarchial_clustering():
-#     data = load_data('NCI60')
-#     print(data)
-#
-# hierarchial_clustering()
-import numpy as np
-# C_0=0.5
-# C_1=0.5
-# C_0_S_0=0.5
-# C_0_S_1=0.5
-# C_1_S_0=0.9
-# C_1_S_1=0.1
-# C_0_R_0=0.8
-# C_0_R_1=0.2
-# C_1_R_0=0.2
-# C_1_R_1=0.8
-# W_1_S_0_R_0=0
-# W_1_S_0_R_1=0.9
-# W_1_S_1_R_0=0.9
-# W_1_S_1_R_1=0.99
-# W_0_S_0_R_0=1
-# W_0_S_0_R_1=0.1
-# W_0_S_1_R_0=0.1
-# W_0_S_1_R_1=0.01
-c=np.array([0.5,0.5])
-s=np.array([0.5,0.5],
-           [0.9,0.1])
-r=np.array([0.8,0.2],
-           [0.2,0.8])
+from sklearn.metrics import accuracy_score
+from ISLP import load_data
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.utils._repr_html import estimator
+
+
+def Load_data():
+    data = load_data('NCI60')
+    df = data['data']
+    y = data['labels']
+    X = pd.DataFrame(df)
+    return X,y
+
+def pca(X,y):
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    pca = PCA(n_components=44)
+    pca_x = pca.fit_transform(X_scaled)
+
+    X_label = []
+    for i in range(1,45):
+        X_label.append(f"PC{i}")
+
+    plt.bar(X_label, pca.explained_variance_ratio_, label='Explained Variance')
+    plt.plot(X_label, pca.explained_variance_ratio_.cumsum(), color='orange', label='Cumulative Explained Variance',
+             marker='X')
+    plt.legend()
+    plt.show()
+    return pca_x
+
+def pca_logisticregression(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=7)
+    scaler = StandardScaler()
+    X_train_scale = scaler.fit_transform(X_train)
+    X_test_scale = scaler.transform(X_test)
+    pca_model = PCA(n_components=44)
+    pca_x_train = pca_model.fit_transform(X_train_scale)#pca_model 2 models are using
+    pca_x_test = pca_model.transform(X_test_scale)
+    model = LogisticRegression(max_iter=1000)
+    model.fit(pca_x_train, y_train)
+    y_pred = model.predict(pca_x_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print("Accuracy:", accuracy)
+
+def hierarchical_clustering(X, y):
+    scaler = StandardScaler()
+
+X,y = Load_data()
+pca_pca = pca(X,y)
+pca_logisticregression(X,y)
+
+
+
